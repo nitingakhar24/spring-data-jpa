@@ -1,15 +1,17 @@
 package com.nitin.springdatajpa.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Data
 @Entity
 @Table(
@@ -42,6 +44,8 @@ public class Product {
     private BigDecimal price;
     private boolean active;
     private String imageURL;
+    @CreationTimestamp
     private LocalDateTime creationDate;
+    @UpdateTimestamp
     private LocalDateTime modificationDate;
 }
