@@ -1,7 +1,6 @@
 package com.nitin.springdatajpa.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +12,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(
+        name = "products",
+        schema = "myecommerce",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "sku_unique",
+                        columnNames = "stock_keeping_unit"
+                )
+        }
+)
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "stock_keeping_unit", nullable = false)
     private String sku;
+    @Column(nullable = false)
     private String name;
     private String description;
     private BigDecimal price;
