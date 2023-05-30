@@ -5,11 +5,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
+
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+
+/**
+ * Annotate the specific test with @Rollback(false) inorder to persist the changes in DB
+ * import org.springframework.test.annotation.Rollback;
+ */
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -18,10 +25,10 @@ class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Test
-    @Rollback(false)
     void givenProduct_whenSave_thenReturnSavedProduct() {
         //given a product
-        final Product product = Product.builder().name("Test Smart TV")
+        final Product product = Product.builder()
+                .name("Test Smart TV")
                 .sku("108TSMTV")
                 .active(true)
                 .description("Test Smart TV description")
@@ -34,6 +41,22 @@ class ProductRepositoryTest {
         assertThat(savedProduct).isNotNull();
         assertThat(savedProduct.getId()).isPositive();
 
+    }
+
+    @Test
+    void givenProduct_whenUpdate_thenUpdateUsingSave() {
+        final Long productId = 1L;
+        //find product by ID
+        Optional<Product> product = productRepository.findById(productId);
+        if (product.isPresent()) {
+            final Product fetchedProduct = product.get();
+            // update product information
+            fetchedProduct.setName("Updated Test Smart TV");
+            fetchedProduct.setDescription("Updated Test Smart TV description");
+            // Save updated product
+            final Product modifiedProduct = productRepository.save(fetchedProduct);
+            assertThat(modifiedProduct.getName()).isEqualTo(fetchedProduct.getName());
+        }
     }
 
 }
