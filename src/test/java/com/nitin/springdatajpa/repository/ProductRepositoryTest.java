@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Annotate the specific test with @Rollback(false) inorder to persist the changes in DB
- * Uncomment import org.springframework.test.annotation.Rollback;
+ *  import org.springframework.test.annotation.Rollback;
  */
 
 @DataJpaTest
